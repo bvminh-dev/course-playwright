@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       browser:
-        description: 'Browser to run tests'
+        description: "Browser to run tests"
         required: true
-        default: 'Chrome'
+        default: "Chrome"
         type: choice
         options:
           - Chrome
@@ -54,6 +54,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: always()
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -61,7 +62,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
+
+      - name: Install Allure Commandline
+        run: npm install -g allure-commandline
 
       - name: Download all test results
         uses: actions/download-artifact@v4
@@ -72,11 +76,15 @@ jobs:
       - name: Merge Allure results
         run: |
           mkdir -p allure/allure-results
-          find all-results -name "*.json" -path "*/allure-results/*" -exec cp {} allure/allure-results/ \;
+          find all-results -path "*/allure-results/*" -type f -exec cp {} allure/allure-results/ \;
 
-      - name: Upload merged results
+      - name: Generate Allure Report
+        run: |
+          allure generate allure/allure-results --clean -o allure/allure-report
+
+      - name: Upload Allure Report
         uses: actions/upload-artifact@v4
         with:
-          name: merged-test-results
-          path: allure/allure-results/
+          name: allure-report
+          path: allure/allure-report
           retention-days: 30
