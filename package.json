@@ -1,0 +1,36 @@
+{
+  "name": "playwright-automation-framework",
+  "version": "1.0.0",
+  "description": "Production-ready Playwright automation framework with TypeScript, Page Object Model, and best practices",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test --headed --workers=2",
+    "test:headless": "npx playwright test --workers=2",
+    "test:ci": "npx playwright test --workers=1 --retries=2",
+    "test:docker": "docker run --shm-size=2g -v $(pwd)/allure:/app/allure -v $(pwd)/test-results:/app/test-results playwright-tests npx playwright test --workers=2",
+    "docker:build": "docker build -t playwright-tests .",
+    "allure-result": "npx allure generate allure/allure-results --clean -o allure/allure-report",
+    "allure-report": "npx allure open allure/allure-report",
+    "report": "npm run allure-result && npm run allure-report",
+    "type:check": "tsc --noEmit"
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "testing",
+    "typescript",
+    "e2e",
+    "page-object-model",
+    "framework"
+  ],
+  "author": "Karim Elkomy",
+  "license": "MIT",
+  "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^22.0.0",
+    "allure-commandline": "^2.36.0",
+    "allure-playwright": "^3.4.3",
+    "typescript": "^5.6.3"
+  }
+}
