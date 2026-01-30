@@ -82,6 +82,12 @@ jobs:
         run: |
           allure generate allure/allure-results --clean -o allure/allure-report
 
+      - name: Deploy Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure/allure-report
+
       - name: Upload Allure Report
         uses: actions/upload-artifact@v4
         with:
